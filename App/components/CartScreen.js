@@ -82,11 +82,25 @@ export default function CartScreen({ route, navigation }) {
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
           />
-          <Text style={styles.totalPrice}>Total: ${totalPrice.toFixed(2)}</Text>
+          <View style={styles.Rowview}>
+            <View style={styles.RowviewA}>
+              <Text style={styles.totalPrice}>EST. TOTAL </Text>
+              <Text style={styles.PriceNumber}>${totalPrice.toFixed(2)}</Text>
+            </View>
+          </View>
         </>
       ) : (
-        <Text style={styles.emptyNotice}>Your cart is empty</Text>
+        <Text style={styles.emptyNotice}>YOUR CART IS EMPTY</Text>
       )}
+      <View style={styles.lastView}>
+        <View style={styles.RowviewAA}>
+          <Image
+            style={styles.Imoji}
+            source={require("../assets/shoppingBagW.png")}
+          />
+          <Text style={styles.totalPriceA}>CHECKOUT</Text>
+        </View>
+      </View>
     </View>
   );
 }
@@ -98,6 +112,7 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     paddingTop: 40,
+    justifyContent: "space-between",
   },
   container: {
     flex: 1,
@@ -149,23 +164,21 @@ const styles = StyleSheet.create({
     height: 20,
   },
   totalPrice: {
-    textAlign: "center",
-    fontSize: 20,
+    textAlign: "left",
+    fontSize: 18,
     justifyContent: "center",
-
-    fontWeight: "600",
+    fontWeight: "300",
     opacity: 0.7,
     fontFamily: "sans-serif",
-
-    letterSpacing: 2,
+    letterSpacing: 1,
   },
   emptyNotice: {
     textAlign: "center",
     justifyContent: "center",
-    marginTop: 300,
-    fontSize: 22,
+    fontSize: 18,
     opacity: 0.7,
     fontFamily: "sans-serif",
+    letterSpacing: 1,
   },
   Main1: {
     height: 120,
@@ -202,5 +215,55 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     fontFamily: "sans-serif",
     letterSpacing: 7,
+  },
+  PriceNumber: {
+    fontSize: 20,
+    fontWeight: "600",
+    opacity: 0.7,
+    fontFamily: "sans-serif",
+    color: "#F28C28",
+  },
+  Rowview: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    height: 40,
+  },
+  RowviewA: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: 340,
+    height: 30,
+  },
+  lastView: {
+    height: 60,
+    backgroundColor: "black",
+    borderColor: "black",
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  RowviewAA: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: 170,
+    height: 30,
+
+    borderColor: "white",
+  },
+  totalPriceA: {
+    textAlign: "left",
+    fontSize: 18,
+    justifyContent: "center",
+    fontWeight: "700",
+    opacity: 0.7,
+    fontFamily: "sans-serif",
+    letterSpacing: 1,
+    color: "white",
+  },
+  Imoji: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 25,
   },
 });

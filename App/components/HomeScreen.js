@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import CartScreen from "./CartScreen";
+import { useNavigation } from "@react-navigation/native";
 
 export default function HomeScreen({ navigation }) {
   const [cartItems, setCartItems] = useState([]);
@@ -32,7 +33,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.HomeScreenContainer}>
       <View style={styles.HomeScreenMain1}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <View style={styles.Main1Mini1}>
             <Image source={require("../assets/Menu.png")} />
           </View>
