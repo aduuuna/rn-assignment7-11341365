@@ -1,35 +1,57 @@
-import "react-native-gesture-handler";
+import React, { useState } from "react";
 import { Dimensions } from "react-native";
-import * as React from "react";
-import { StyleSheet } from "react-native";
-import CartScreen from "./components/CartScreen";
-import HomeScreen from "./components/HomeScreen";
-import DrawerContentView from "./components/DrawerContentView";
-
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createDrawerNavigator, DrawerContent } from "@react-navigation/drawer";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import HomeScreen from "./components/HomeScreen";
+import CartScreen from "./components/CartScreen";
+import DrawerContentView from "./components/DrawerContentView";
+import ProductDetailScreen from "./components/ProductDetailScreen";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
 const screenWidth = Dimensions.get("window").width;
-const drawerWidth = screenWidth * 0.6; // 50% of screen width
+const drawerWidth = screenWidth * 0.6;
 
-function HomeStack() {
+function HomeStack({ cartItems, addToCart, removeFromCart }) {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen
-        name="Checkout"
-        component={CartScreen}
-        options={{ headerTitle: " " }}
-      />
+      <Stack.Screen name="HomeScreen">
+        {(props) => (
+          <HomeScreen {...props} cartItems={cartItems} addToCart={addToCart} />
+        )}
+      </Stack.Screen>
+      <Stack.Screen name="Checkout">
+        {(props) => (
+          <CartScreen
+            {...props}
+            cartItems={cartItems}
+            removeFromCart={removeFromCart}
+          />
+        )}
+      </Stack.Screen>
+      <Stack.Screen name="ProductDetail">
+        {(props) => <ProductDetailScreen {...props} addToCart={addToCart} />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 }
 
 export default function App() {
+  const [cartItems, setCartItems] = useState([]);
+
+  const addToCart = (item) => {
+    setCartItems((prevItems) => [
+      ...prevItems,
+      { ...item, id: Date.now().toString() },
+    ]);
+  };
+
+  const removeFromCart = (itemId) => {
+    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+  };
+
   return (
     <NavigationContainer>
       <Drawer.Navigator
@@ -43,41 +65,17 @@ export default function App() {
         }}
         drawerContent={(props) => <DrawerContentView {...props} />}
       >
-        <Drawer.Screen name="Store" component={HomeStack} />
+        <Drawer.Screen name="Store">
+          {(props) => (
+            <HomeStack
+              {...props}
+              cartItems={cartItems}
+              addToCart={addToCart}
+              removeFromCart={removeFromCart}
+            />
+          )}
+        </Drawer.Screen>
       </Drawer.Navigator>
     </NavigationContainer>
   );
 }
-// export default function App() {
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator
-//         screenOptions={{
-//           headerShown: false,
-//         }}
-//       >
-//         <Stack.Screen
-//           name="Home"
-//           component={HomeScreen}
-//           options={{ headerTitle: " " }}
-//         />
-//         <Stack.Screen
-//           name="Checkout"
-//           component={CartScreen}
-//           options={{ headerTitle: " " }}
-//         />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     backgroundColor: "white",
-//     alignItems: "center",
-//     display: "flex",
-//     height: "100%",
-//     width: "100%",
-//     paddingTop: 30,
-//   },
-// });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -24,7 +24,7 @@ export default function CartScreen({ route, navigation }) {
 
   const renderItem = ({ item }) => (
     <View style={styles.cartItem}>
-      <Image source={item.image} style={styles.itemImage} />
+      <Image source={{ uri: item.image }} style={styles.itemImage} />
       <View style={styles.itemInfo}>
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={styles.itemAbout}>{item.about}</Text>
@@ -128,20 +128,19 @@ const styles = StyleSheet.create({
   },
   itemImage: {
     height: 150,
-    width: 100,
+    width: 120,
     marginRight: 20,
+    resizeMode: "contain",
   },
   itemInfo: {
     flex: 1,
     fontSize: 30,
   },
   itemName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
     opacity: 0.7,
     fontFamily: "sans-serif",
-
-    letterSpacing: 2,
   },
   itemAbout: {
     fontSize: 16,

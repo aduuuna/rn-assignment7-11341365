@@ -1,25 +1,39 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
-  ImageBackground,
   Image,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
+import axios from "axios";
 import CartScreen from "./CartScreen";
 import { useNavigation } from "@react-navigation/native";
 
 export default function HomeScreen({ navigation }) {
   const [cartItems, setCartItems] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get("https://fakestoreapi.com/products");
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  };
 
   const addToCart = (item) => {
     setCartItems((prevItems) => [
       ...prevItems,
       {
         ...item,
-        id: Date.now().toString(), // Generate a unique id for each cart entry
+        id: Date.now().toString(),
       },
     ]);
   };
@@ -28,7 +42,35 @@ export default function HomeScreen({ navigation }) {
     setCartItems(newCartItems);
   }, []);
 
-  console.log("Navigating to Checkout with:", { cartItems, updateCart });
+  const renderProduct = ({ item }) => (
+    <View style={styles.productItem}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("ProductDetail", { product: item })}
+      >
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: item.image }} style={styles.productImage} />
+        </View>
+        <Text style={styles.productTitle}>{item.title}</Text>
+        <Text style={styles.productPrice}>${item.price}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.addToCartIcon}
+        onPress={() =>
+          addToCart({
+            id: item.id,
+            name: item.title,
+            price: item.price,
+            image: item.image,
+          })
+        }
+      >
+        <Image
+          source={require("../assets/add_circle.png")}
+          style={styles.addCircle}
+        />
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <View style={styles.HomeScreenContainer}>
@@ -80,298 +122,15 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView style={styles.scroll}>
-        <View style={styles.Hmm}>
-          <View style={styles.HomeScreenMain3}>
-            <View style={styles.Main3Left}>
-              <View style={styles.Main3Top}>
-                <ImageBackground
-                  source={require("../assets/dress1.png")}
-                  style={styles.backgroundImage}
-                >
-                  <TouchableOpacity
-                    onPress={() =>
-                      addToCart({
-                        name: "OFFICE WEAR",
-                        price: "120",
-                        about: "reversible angola cardigan",
-                        image: require("../assets/dress1.png"),
-                      })
-                    }
-                  >
-                    <Image
-                      source={require("../assets/add_circle.png")}
-                      style={styles.addCircle}
-                    />
-                  </TouchableOpacity>
-                </ImageBackground>
-              </View>
-              <View style={styles.Main3Down}>
-                <View style={styles.Font}>
-                  <Text style={styles.Text1}>Office Wear</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text2}>reversible angola cardigan</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text3}>$120</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.Main3Right}>
-              <View style={styles.Main3Top}>
-                <ImageBackground
-                  source={require("../assets/dress2.png")}
-                  style={styles.backgroundImage}
-                >
-                  <TouchableOpacity
-                    onPress={() =>
-                      addToCart({
-                        name: "BLACK",
-                        price: "120",
-                        about: "reversible angola cardigan",
-                        image: require("../assets/dress2.png"),
-                      })
-                    }
-                  >
-                    <Image
-                      source={require("../assets/add_circle.png")}
-                      style={styles.addCircle}
-                    />
-                  </TouchableOpacity>
-                </ImageBackground>
-              </View>
-              <View style={styles.Main3Down}>
-                <View style={styles.Font}>
-                  <Text style={styles.Text1}>Black</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text2}>reversible angola cardigan</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text3}>$120</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={styles.HomeScreenMain3}>
-            <View style={styles.Main3Left}>
-              <View style={styles.Main3Top}>
-                <ImageBackground
-                  source={require("../assets/dress3.png")}
-                  style={styles.backgroundImage}
-                >
-                  <TouchableOpacity
-                    onPress={() =>
-                      addToCart({
-                        name: "CHURCH WEAR",
-                        price: "120",
-                        about: "reversible angola cardigan",
-                        image: require("../assets/dress3.png"),
-                      })
-                    }
-                  >
-                    <Image
-                      source={require("../assets/add_circle.png")}
-                      style={styles.addCircle}
-                    />
-                  </TouchableOpacity>
-                </ImageBackground>
-              </View>
-              <View style={styles.Main3Down}>
-                <View style={styles.Font}>
-                  <Text style={styles.Text1}>Church Wear</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text2}>reversible angola cardigan</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text3}>$120</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.Main3Right}>
-              <View style={styles.Main3Top}>
-                <ImageBackground
-                  source={require("../assets/dress4.png")}
-                  style={styles.backgroundImage}
-                >
-                  <TouchableOpacity
-                    onPress={() =>
-                      addToCart({
-                        name: "LAMEREI",
-                        price: "120",
-                        about: "reversible angola cardigan",
-                        image: require("../assets/dress4.png"),
-                      })
-                    }
-                  >
-                    <Image
-                      source={require("../assets/add_circle.png")}
-                      style={styles.addCircle}
-                    />
-                  </TouchableOpacity>
-                </ImageBackground>
-              </View>
-              <View style={styles.Main3Down}>
-                <View style={styles.Font}>
-                  <Text style={styles.Text1}>Lamerei</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text2}>reversible angola cardigan</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text3}>$120</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={styles.HomeScreenMain3}>
-            <View style={styles.Main3Left}>
-              <View style={styles.Main3Top}>
-                <ImageBackground
-                  source={require("../assets/dress2.png")}
-                  style={styles.backgroundImage}
-                >
-                  <TouchableOpacity
-                    onPress={() =>
-                      addToCart({
-                        name: "OFFICE WEAR",
-                        price: "120",
-                        about: "reversible angola cardigan",
-                        image: require("../assets/dress2.png"),
-                      })
-                    }
-                  >
-                    <Image
-                      source={require("../assets/add_circle.png")}
-                      style={styles.addCircle}
-                    />
-                  </TouchableOpacity>
-                </ImageBackground>
-              </View>
-              <View style={styles.Main3Down}>
-                <View style={styles.Font}>
-                  <Text style={styles.Text1}>Office Wear</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text2}>reversible angola cardigan</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text3}>$120</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.Main3Right}>
-              <View style={styles.Main3Top}>
-                <ImageBackground
-                  source={require("../assets/dress6.png")}
-                  style={styles.backgroundImage}
-                >
-                  <TouchableOpacity
-                    onPress={() =>
-                      addToCart({
-                        name: "LOOP",
-                        price: "120",
-                        about: "reversible angola cardigan",
-                        image: require("../assets/dress6.png"),
-                      })
-                    }
-                  >
-                    <Image
-                      source={require("../assets/add_circle.png")}
-                      style={styles.addCircle}
-                    />
-                  </TouchableOpacity>
-                </ImageBackground>
-              </View>
-              <View style={styles.Main3Down}>
-                <View style={styles.Font}>
-                  <Text style={styles.Text1}>Lopo</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text2}>reversible angola cardigan</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text3}>$120</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={styles.HomeScreenMain3}>
-            <View style={styles.Main3Left}>
-              <View style={styles.Main3Top}>
-                <ImageBackground
-                  source={require("../assets/dress7.png")}
-                  style={styles.backgroundImage}
-                >
-                  <TouchableOpacity
-                    onPress={() =>
-                      addToCart({
-                        name: "21WN",
-                        price: "120",
-                        about: "reversible angola cardigan",
-                        image: require("../assets/dress7.png"),
-                      })
-                    }
-                  >
-                    <Image
-                      source={require("../assets/add_circle.png")}
-                      style={styles.addCircle}
-                    />
-                  </TouchableOpacity>
-                </ImageBackground>
-              </View>
-              <View style={styles.Main3Down}>
-                <View style={styles.Font}>
-                  <Text style={styles.Text1}>21WN</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text2}>reversible angola cardigan</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text3}>$120</Text>
-                </View>
-              </View>
-            </View>
-            <View style={styles.Main3Right}>
-              <View style={styles.Main3Top}>
-                <ImageBackground
-                  source={require("../assets/dress3.png")}
-                  style={styles.backgroundImage}
-                >
-                  <TouchableOpacity
-                    onPress={() =>
-                      addToCart({
-                        name: "LAME",
-                        price: "120",
-                        about: "reversible angola cardigan",
-                        image: require("../assets/dress3.png"),
-                      })
-                    }
-                  >
-                    <Image
-                      source={require("../assets/add_circle.png")}
-                      style={styles.addCircle}
-                    />
-                  </TouchableOpacity>
-                </ImageBackground>
-              </View>
-              <View style={styles.Main3Down}>
-                <View style={styles.Font}>
-                  <Text style={styles.Text1}>lame</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text2}>reversible angola cardigan</Text>
-                </View>
-                <View style={styles.Font}>
-                  <Text style={styles.Text3}>$120</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
+
+      <View style={styles.HomeScreenMain3A}>
+        <FlatList
+          data={products}
+          renderItem={renderProduct}
+          keyExtractor={(item) => item.id.toString()}
+          numColumns={2}
+        />
+      </View>
     </View>
   );
 }
@@ -486,7 +245,8 @@ const styles = StyleSheet.create({
   HomeScreenMain3: {
     height: 350,
     width: 350,
-
+    borderWidth: 1,
+    borderColor: "black",
     marginBottom: 20,
     alignItems: "center",
     justifyContent: "space-evenly",
@@ -563,5 +323,57 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     fontFamily: "sans-serif",
     color: "#F28C28",
+  },
+  HomeScreenMain3A: {
+    flex: 1,
+    backgroundColor: "white",
+    padding: 10,
+    width: "100%",
+    height: "100%",
+  },
+
+  productItem: {
+    flex: 1,
+    margin: 5,
+    padding: 10,
+    backgroundColor: "#f9f9f9",
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    position: "relative",
+  },
+  imageContainer: {
+    width: "100%",
+    height: 120, // Adjust this value as needed
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  productImage: {
+    width: 150,
+    height: 100,
+    resizeMode: "contain",
+  },
+  productTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    textAlign: "center",
+    marginBottom: 5,
+    textAlign: "left",
+  },
+  productPrice: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#F28C28",
+    textAlign: "left",
+  },
+  addToCartIcon: {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
+  },
+  addCircle: {
+    width: 25,
+    height: 25,
   },
 });
