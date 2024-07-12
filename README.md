@@ -65,5 +65,5 @@ A React Native mobile application for browsing and purchasing products.
 ![CartScreen page2](screenshot/Image4.jpg)
 ![ProductDetailScreen page 1](screenshot/Image5.jpg)
 ![ProductDetailsScreen page 2](screenshot/Image6.jpg)
-![ProductDetailsScreen page3](screenshot/Image7.jpg)
+![ProductDetailsScreen page3](screenshot/image7.jpg)
 ![Drawer Navigator](screenshot/Image8.jpg)
